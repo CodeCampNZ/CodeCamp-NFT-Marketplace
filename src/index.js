@@ -24,7 +24,11 @@ const Application = () => {
   else {
     return (
       <div style={{ display: "flex", justifyContent: "center" }}>
-        <QuickStart />
+        <MoralisProvider appId={APP_ID} serverUrl={SERVER_URL}>
+          <MoralisDappProvider>
+            <QuickStart />
+          </MoralisDappProvider>
+        </MoralisProvider>
       </div>
     );
   }

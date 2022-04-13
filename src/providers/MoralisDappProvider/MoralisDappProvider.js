@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useMoralis } from "react-moralis";
 import MoralisDappContext from "./context";
+import contract from "./contract_abi.json";
 
 function MoralisDappProvider({ children }) {
   const { web3, Moralis, user } = useMoralis();
   const [walletAddress, setWalletAddress] = useState();
   const [chainId, setChainId] = useState();       
-  const [contractABI, setContractABI] = useState('{"noContractDeployed": true}'); //Smart Contract ABI here
-  const [marketAddress, setMarketAddress] = useState(); //Smart Contract Address Here
-
+  const [contractABI, setContractABI] = useState(contract); //Smart Contract ABI
+  const [marketAddress, setMarketAddress] = useState("0x6960D0089659cbE8034E3c4A4997bBd1845Ad063"); //Smart Contract Address (TODO: Set up a permanent address by deploying a smart contract permanently)
 
   useEffect(() => {
     Moralis.onChainChanged(function (chain) {

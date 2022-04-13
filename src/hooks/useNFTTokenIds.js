@@ -19,7 +19,7 @@ export const useNFTTokenIds = (addr) => {
   } = useMoralisWeb3ApiCall(token.getAllTokenIds, {
     chain: chainId,
     address: addr,
-    limit: 10,
+    limit: 100,
   });
 
   useEffect(async () => {
@@ -39,6 +39,7 @@ export const useNFTTokenIds = (addr) => {
                 NFT.image = resolveLink(data.image);
               });
           } catch (error) {
+            console.log("Error retrieving NFTs: ", error);
             setFetchSuccess(false);
               
 /*          !!Temporary work around to avoid CORS issues when retrieving NFT images!!

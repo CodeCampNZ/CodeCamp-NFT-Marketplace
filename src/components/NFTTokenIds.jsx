@@ -66,9 +66,9 @@ function NFTTokenIds({ inputValue, setInputValue }) {
   const { chainId, marketAddress, contractABI, walletAddress } =
     useMoralisDapp();
   const nativeName = getNativeByChain(chainId);
-  const contractABIJson = JSON.parse(contractABI);
+  const contractABIJson = typeof contractABI==="string" ? JSON.parse(contractABI) : contractABI;
   const { Moralis } = useMoralis();
-  const queryMarketItems = useMoralisQuery("MarketItems");
+  const queryMarketItems = useMoralisQuery("CreatedMarketItems");
   const fetchMarketItems = JSON.parse(
     JSON.stringify(queryMarketItems.data, [
       "objectId",
@@ -104,11 +104,11 @@ function NFTTokenIds({ inputValue, setInputValue }) {
 
     await contractProcessor.fetch({
       params: ops,
-      onSuccess: () => {
+      onSuccess: async () => {
         console.log("success");
         setLoading(false);
         setVisibility(false);
-        updateSoldMarketItem();
+        await updateSoldMarketItem();
         succPurchase();
       },
       onError: (error) => {
@@ -148,7 +148,7 @@ function NFTTokenIds({ inputValue, setInputValue }) {
 
   async function updateSoldMarketItem() {
     const id = getMarketItem(nftToBuy).objectId;
-    const marketList = Moralis.Object.extend("MarketItems");
+    const marketList = Moralis.Object.extend("CreatedMarketItems");
     const query = new Moralis.Query(marketList);
     await query.get(id).then((obj) => {
       obj.set("sold", true);
@@ -162,8 +162,8 @@ function NFTTokenIds({ inputValue, setInputValue }) {
       (e) =>
         e.nftContract === nft?.token_address &&
         e.tokenId === nft?.token_id &&
-        e.sold === false &&
-        e.confirmed === true
+        e.sold === false //&&
+        //e.confirmed === true
     );
     return result;
   };

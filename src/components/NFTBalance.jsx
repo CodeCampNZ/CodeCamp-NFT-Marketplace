@@ -22,14 +22,14 @@ const styles = {
 
 function NFTBalance() {
   const { NFTBalance, fetchSuccess } = useNFTBalance();
-  const { chainId, marketAddress, contractABI } = useMoralisDapp();
+  const { chainId, marketAddress, contractABI, walletAddress } = useMoralisDapp();
   const { Moralis } = useMoralis();
   const [visible, setVisibility] = useState(false);
   const [nftToSend, setNftToSend] = useState(null);
   const [price, setPrice] = useState(1);
   const [loading, setLoading] = useState(false);
   const contractProcessor = useWeb3ExecuteFunction();
-  const contractABIJson = JSON.parse(contractABI);
+  const contractABIJson = typeof contractABI==="string" ? JSON.parse(contractABI) : contractABI;
   const listItemFunction = "createMarketItem";
   const ItemImage = Moralis.Object.extend("ItemImages");
 
@@ -63,9 +63,9 @@ function NFTBalance() {
     });
   }
 
-
   async function approveAll(nft) {
-    setLoading(true);  
+    setLoading(true);
+    checkApprovalForAll(nft);  
     const ops = {
       contractAddress: nft.token_address,
       functionName: "setApprovalForAll",
@@ -87,6 +87,33 @@ function NFTBalance() {
       onError: (error) => {
         setLoading(false);
         failApprove();
+      },
+    });
+    checkApprovalForAll(nft);
+  }
+
+  async function checkApprovalForAll(nft) {
+    // setLoading(true);
+    const ops = {
+      contractAddress: nft.token_address,
+      functionName: "isApprovedForAll",
+      abi: [{"inputs":[{"internalType":"address","name":"owner","type":"address"},{"internalType":"address","name":"operator","type":"address"}],"name":"isApprovedForAll","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"}],
+      params: {
+        owner: walletAddress,
+        operator: marketAddress
+      },
+    };
+
+    await contractProcessor.fetch({
+      params: ops,
+      onSuccess: (results) => {
+        console.log(results)
+        // setLoading(false);
+        // setVisibility(false);
+      },
+      onError: (error) => {
+        // setLoading(false);
+        console.log("Approval check error: ", error)
       },
     });
   }
@@ -203,7 +230,7 @@ function NFTBalance() {
               }
               key={index}
             >
-              <Meta title={nft.name} description={nft.contract_type} />
+              <Meta title={nft.name} description={nft.contract_type + ", " + `#${nft.token_id}`} />
             </Card>
           ))}
       </div>

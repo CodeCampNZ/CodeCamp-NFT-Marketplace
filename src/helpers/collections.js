@@ -13,6 +13,18 @@ export const networkCollections = {
       name: "Pixel Show",
       addrs: "0xCA34404dD8Bd6537BE76F3A51B379F8949bD7973",
     },
+    {
+      image:
+        "https://lh3.googleusercontent.com/XPfXfUsD7f3D_kO9DmN9Ke1ZadWOBnfWB6GEwJSav93SVrfYsH9JscoIhrZrC44DvpImmRWBs99bc9T4v_0yLyOtggBlVhlvtzJh5Bw=w199",
+      name: "Tenshi Girl",
+      addrs: "0xed2Ccc4972AB42CE3bE4A9E977faEA444E09F57a",
+    },
+    {
+      image:
+        "https://lh3.googleusercontent.com/bjgmZQ0AMx7HPT_ysR2QqowBYYxYiI54zmzRsT-Nu6jhDMPFUMYn3LdAGbPQHfYTow3VFR40wnTzGYCyR-IQoL4AaaUuIqMfS3EkrA=w600",
+      name: "Bar Tardigrades",
+      addrs: "0xcCA8428cb06834771e7Fb8f8AB947884a2A464f4",
+    }
   ],
 
   "0x1": [
